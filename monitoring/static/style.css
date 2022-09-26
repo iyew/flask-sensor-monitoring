@@ -24,20 +24,26 @@ nav h1 {
     margin: 0;
 }
 
-.content h1 {
+.content {
     font-family: 'IBM Plex Sans KR', sans-serif;
+    display: grid;
+    grid-template-rows: auto auto auto;
+    grid-template-columns: auto auto auto;
+    gap: 10%;
+    margin: 2rem;
+}
+
+.container h2 {
     color: gray;
 }
 
-a {
-    color: steelblue;
-}
-
-hr {
+.container hr {
+    width: 100%;
     border: none;
     border-top: 1px solid lightgray;
 }
 
-
-
+.container p {
+    color: black;
+}
 

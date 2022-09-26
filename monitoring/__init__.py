@@ -6,8 +6,8 @@ from flask import Flask, render_template
 def create_app():
     app = Flask(__name__)
 
-    connection = connect_db()
-    port = connect_serial()
+    #connection = connect_db()
+    #port = connect_serial()
 
     #while True:
     #    db.get_sensors()
@@ -15,8 +15,9 @@ def create_app():
 
     @app.route('/')
     def index():
-        sensors = get_sensors()
-        return render_template('index.html', title='Monitoring', sensors=sensors)
+        #sensors = get_sensors()
+        #return render_template('index.html', title='Monitoring', sensors=sensors)
+        return render_template('index.html', title='Monitoring')
 
     return app
 
