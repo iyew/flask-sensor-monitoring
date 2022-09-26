@@ -1,0 +1,14 @@
+CREATE DATABASE conception DEFAULT CHARACTER SET UTF8;
+
+use conception;
+
+CREATE TABLE IF NOT EXISTS sensors(
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    datetimes TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    temperature FLOAT,
+    humidity FLOAT,
+    pm1_0 INT,
+    pm2_5 INT,
+    pm10 INT,
+    voc INT
+) CHARSET=utf8;
