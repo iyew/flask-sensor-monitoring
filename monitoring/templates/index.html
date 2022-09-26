@@ -7,21 +7,16 @@
 <nav>
   <img src="{{ url_for('static', filename='logo.svg') }}" class="logo">
   <h1>Monitoring</h1>
+  <h2>{{ sensors['datetimes'] }}</h2>
 </nav>
 <article class="content">
-{#
   {% for key, val in sensors.items() %}
+    {% if key != 'id' and key != 'datetimes' %}
     <section class="container">
-      <h2>{{ sensors[key] }}</h2>
-      <p>{{ sensors[val] }}</p>
+      <h2>{{ key }}</h2>
+      <hr>
+      <p>{{ val }}</p>
     </section>
-  {% endfor %}
-#}
-  {% for i in range(1, 10) %}
-  <section class="container">
-    <h2>Sensor {{ i }}</h2>
-    <hr>
-    <p>{{ i }}.{{ i }}</p>
-  </section>
+    {% endif %}
   {% endfor %}
 </article>

@@ -24,6 +24,12 @@ nav h1 {
     margin: 0;
 }
 
+nav h2 {
+    font-family: 'IBM Plex Sans KR', sans-serif;
+    color: lightgray;
+    padding: 0 2rem;
+}
+
 .content {
     font-family: 'IBM Plex Sans KR', sans-serif;
     display: grid;
@@ -46,4 +52,3 @@ nav h1 {
 .container p {
     color: black;
 }
-
