@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Monitoring - Conception</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@200&family=Raleway:wght@200&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+ </head>
+  <body>
+    <nav>
+      <img src="{{ url_for('static', filename='logo.svg') }}" class="logo">
+      <h1>Monitoring</h1>
+      {% block datetimes %}{% endblock %}
+    </nav>
+    {% block containers %}{% endblock %}
+    {% block scripts %}{% endblock %}
+  <body>
+</html>

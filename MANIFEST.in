@@ -1,3 +1,0 @@
-graft monitoring/static
-graft monitoring/templates
-global-exclude *.pyc

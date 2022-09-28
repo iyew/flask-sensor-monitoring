@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block datetimes %}
+<h2 id="datetimes"></h2>
+{% endblock %}
+
+{% block containers %}
+<article class="content"></article>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script>
+    function updateContainers() {$.ajax({
+        url: '/update',
+        type: 'POST',
+        success: function(response) {
+            $("#datetimes").text(response["datetimes"]);
+
+            //console.log(response);
+
+            var sensorLength = Object.keys(response).length;
+            var lastKey = Object.keys(response)[sensorLength-1];
+
+            if (document.querySelector(`#${lastKey}`) == null) {
+                $.each(response, function(key, val) {
+                    if (key != "id" && key != "datetimes") {
+                        let containers = `<h2>${key}</h2><hr><p id=${key}>${val}</p>`
+                        $(".content").append(`<section class="container">${containers}</section>`);
+                    }
+                })
+            } else {
+                $.each(response, function(key, val) {
+                    if (key != "id" && key != "datetimes") {
+                        $(`#${key}`).text(val)
+                    }
+                })
+            }
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    })}
+    setInterval(updateContainers, 1000);
+</script>
+{% endblock %}
