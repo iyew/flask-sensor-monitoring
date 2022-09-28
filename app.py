@@ -15,6 +15,7 @@ def index():
 @app.route("/update", methods=['POST'])
 def update():
     connection = connect_db()
+    test_insert(connection)
     row = get_sensors(connection)
     return jsonify(row)
 
@@ -41,14 +42,14 @@ def insert_sensors(port, connection):
     data = port.readline()
 
     with connection.cursor() as cursor:
-        cursor.execute("""INSERT INTO sensors VALUES (%s)""", (data))
+        cursor.execute("INSERT INTO sensors (temperature, humidity, pm1_0, pm2_5, pm10, voc) VALUES (%s)", (data))
     
     connection.commit()
 
 
 def get_sensors(connection):
     with connection.cursor() as cursor:
-        cursor.execute('SELECT * FROM sensors ORDER BY id DESC LIMIT 1')
+        cursor.execute("SELECT * FROM sensors ORDER BY id DESC LIMIT 1")
         row = cursor.fetchone()
 
     return row
@@ -58,7 +59,9 @@ def test_insert(connection):
     with connection.cursor() as cursor:
         random_float = round(random.uniform(1, 100), 2)
         random_int = random.randint(1, 100)
-        cursor.execute("INSERT INTO sensors ('temperature', 'humidity', pm1_0, pm2_5, pm10, voc) VALUES (%s)", (random_float, random_float, random_int, random_int, random_int, random_int))
+        data = (random_float, random_float, random_int, random_int, random_int, random_int)
+        print(data)
+        cursor.execute("INSERT INTO sensors (temperature, humidity, pm1_0, pm2_5, pm10, voc) VALUES (%s, %s, %s, %s, %s, %s)", (random_float, random_float, random_int, random_int, random_int, random_int))
 
     connection.commit()
 
