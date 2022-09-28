@@ -1,6 +1,8 @@
+import time
 import random
 import serial
 import pymysql
+import threading
 from flask import Flask, render_template, jsonify
 
 
@@ -9,13 +11,18 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
+    connection = connect_db()
+    #port = connect_serial()
+    th = threading.Thread(target=test_insert, args=(connection,), daemon=True)
+    #th = threading.Thread(target=insert_sensors, args=(port, connection), daemon=True)
+    th.start()
+
     return render_template('index.html')
     
     
 @app.route("/update", methods=['POST'])
 def update():
     connection = connect_db()
-    test_insert(connection)
     row = get_sensors(connection)
     return jsonify(row)
 
@@ -39,12 +46,14 @@ def close_db(connection):
 
 
 def insert_sensors(port, connection):
-    data = port.readline()
+    while True:
+        data = port.readline()
 
-    with connection.cursor() as cursor:
-        cursor.execute("INSERT INTO sensors (temperature, humidity, pm1_0, pm2_5, pm10, voc) VALUES (%s)", (data))
-    
-    connection.commit()
+        with connection.cursor() as cursor:
+            cursor.execute("INSERT INTO sensors (temperature, humidity, pm1_0, pm2_5, pm10, voc) VALUES (%s, %s, %s, %s, %s, %s)", (data))
+
+        connection.commit()
+        time.sleep(1)
 
 
 def get_sensors(connection):
@@ -56,14 +65,16 @@ def get_sensors(connection):
 
 
 def test_insert(connection):
-    with connection.cursor() as cursor:
-        random_float = round(random.uniform(1, 100), 2)
-        random_int = random.randint(1, 100)
-        data = (random_float, random_float, random_int, random_int, random_int, random_int)
-        print(data)
-        cursor.execute("INSERT INTO sensors (temperature, humidity, pm1_0, pm2_5, pm10, voc) VALUES (%s, %s, %s, %s, %s, %s)", (random_float, random_float, random_int, random_int, random_int, random_int))
+    while True:
+        with connection.cursor() as cursor:
+            random_float = round(random.uniform(1, 100), 2)
+            random_int = random.randint(1, 100)
+            data = (random_float, random_float, random_int, random_int, random_int, random_int)
+            print(data)
+            cursor.execute("INSERT INTO sensors (temperature, humidity, pm1_0, pm2_5, pm10, voc) VALUES (%s, %s, %s, %s, %s, %s)", (random_float, random_float, random_int, random_int, random_int, random_int))
 
-    connection.commit()
+        connection.commit()
+        time.sleep(1)
 
 
 def connect_serial():
@@ -79,3 +90,4 @@ def close_serial(port):
 
 if __name__ == '__main__':
     app.run()
+
