@@ -1,5 +1,4 @@
 import time
-import random
 import serial
 import pymysql
 import threading
