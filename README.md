@@ -12,14 +12,14 @@ Sensor -- Arduino -- USB -- Pi -- Flask, MySQL, jQuery
 Settings
 --------
 
-# Arduino
+### Arduino
 ```
 $ sudo apt install arduino
 $ sudo usermod -a -G tty pi
 $ sudo usermod -a -G dialout pi
 ```
 
-# MariaDB
+### MariaDB
 ```
 $ sudo apt install mysql-server mysql-client
 or
@@ -42,7 +42,7 @@ mysql> DESC sensors;
 mysql> use conception;
 ```
 
-# Flask
+### Flask
 ```
 $ python3 -m venv venv
 $ source venv/bin/activate
