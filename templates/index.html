@@ -17,8 +17,6 @@
         success: function(response) {
             $("#datetimes").text(response["datetimes"]);
 
-            //console.log(response);
-
             var sensorLength = Object.keys(response).length;
             var lastKey = Object.keys(response)[sensorLength-1];
 

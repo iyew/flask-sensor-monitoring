@@ -12,9 +12,8 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     connection = connect_db()
-    #port = connect_serial()
-    th = threading.Thread(target=test_insert, args=(connection,), daemon=True)
-    #th = threading.Thread(target=insert_sensors, args=(port, connection), daemon=True)
+    port = connect_serial()
+    th = threading.Thread(target=insert_sensors, args=(port, connection), daemon=True)
     th.start()
 
     return render_template('index.html')
@@ -30,8 +29,8 @@ def update():
 def connect_db():
     connection = pymysql.connect(
         host='localhost',
-        user='root',
-        password='root',
+        user='admin',
+        password='admin',
         db='conception',
         charset='utf8',
         cursorclass=pymysql.cursors.DictCursor
@@ -47,10 +46,14 @@ def close_db(connection):
 
 def insert_sensors(port, connection):
     while True:
+        # data format: "float float int int int int"
+        # You must write 'Serial.print(sensor_1); Serial.print(" "); ... Serial.println(sensor_n);' in Arduino
+        # ex) "11.0 22.0 33 44 55 66"
         data = port.readline()
+        sensors = data.decode('utf-8').split()
 
         with connection.cursor() as cursor:
-            cursor.execute("INSERT INTO sensors (temperature, humidity, pm1_0, pm2_5, pm10, voc) VALUES (%s, %s, %s, %s, %s, %s)", (data))
+            cursor.execute("INSERT INTO sensors (temperature, humidity, pm1_0, pm2_5, pm10, voc) VALUES (%s, %s, %s, %s, %s, %s)", sensors)
 
         connection.commit()
         time.sleep(1)
@@ -64,21 +67,8 @@ def get_sensors(connection):
     return row
 
 
-def test_insert(connection):
-    while True:
-        with connection.cursor() as cursor:
-            random_float = round(random.uniform(1, 100), 2)
-            random_int = random.randint(1, 100)
-            data = (random_float, random_float, random_int, random_int, random_int, random_int)
-            print(data)
-            cursor.execute("INSERT INTO sensors (temperature, humidity, pm1_0, pm2_5, pm10, voc) VALUES (%s, %s, %s, %s, %s, %s)", (random_float, random_float, random_int, random_int, random_int, random_int))
-
-        connection.commit()
-        time.sleep(1)
-
-
 def connect_serial():
-    port = serial.Serial('/dev/ttyACM0', '9600')
+    port = serial.Serial('/dev/ttyACM0', '115200')
 
     return port
 
